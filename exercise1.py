@@ -43,12 +43,16 @@ def selection(t, f):
     """
     Perform select operation on table t that satisfy condition f.
 
+    param: t (table 1/a list of lists), function (operates on data rows of t1)
+    raises:
+    output: table that contains rows that meet criteria of function
+    assumptions: the output of the function that is being passed in is a Boolean (T/F)
+
     Example:
-    > R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
-    ># Define function f that returns True iff
-    > # the last element in the row is greater than 3.
-    > def f(row): row[-1] > 3
-    > select(R, f)
+    R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
+    # Define function f that returns True if the last element in the row is greater than 3.
+    def f(row): row[-1] > 3
+    select(R, f)
     [["A", "B", "C"], [4, 5, 6]]
 
     """
@@ -61,11 +65,16 @@ def projection(t, r):
     Perform projection operation on table t
     using the attributes subset r.
 
-    Example:
-    > R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
-    > projection(R, ["A", "C"])
-    [["A", "C"], [1, 3], [4, 6]]
+    param: t (table1/a list of lists), r (the attributes subset/a list)
+    raises: TypeError
+    output: table (list of lists) containing all values under the heading of attributes subset
+    assumptions:
 
+    Example:
+    R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
+    projection(R, ["A", "C"])
+    [["A", "C"], [1, 3], [4, 6]]
+    
     """
 
     return []
@@ -75,10 +84,19 @@ def cross_product(t1, t2):
     """
     Return the cross-product of tables t1 and t2.
 
+    param: t1 (table1/a list of lists), t2 (table2/a list of lists)
+    raises:
+    output: table (list of lists) that combines every row of first table (t1) with every row of second table (t2)
+
+
     Example:
     > R1 = [["A", "B"], [1,2], [3,4]]
     > R2 = [["C", "D"], [5,6]]
     [["A", "B", "C", "D"], [1, 2, 5, 6], [3, 4, 5, 6]]
+    if reversed:
+    R2 = [["C", "D"], [5,6]]
+    R1 = [["A", "B"], [1,2], [3,4]]
+    [["C", "D", "A", B"], [5, 6, 1, 2], [5, 6, 3, 4]]
 
 
     """
