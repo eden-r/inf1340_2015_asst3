@@ -166,11 +166,11 @@ def valid_date_format(date_string):
     """
 
 def valid_visa_format(date_string, visa_code, x):
-    valid_date_format = valid_date_format(date_string)
+    valid_date_correct = valid_date_format(date_string)
     valid_visa_code = valid_visa_code_format(visa_code)
     valid_visa_date = is_more_than_x_years_ago(x, date_string)
 
-    if (valid_date_format and valid_visa_date and valid_visa_date) is True:
+    if (valid_date_correct and valid_visa_date and valid_visa_date) is True:
         return True
     else:
         return False
@@ -181,6 +181,12 @@ def valid_visa_format(date_string, visa_code, x):
     :param valid_date_format(), valid_visa_format(), is_more_than_x_years_ago()
     :return: Boolean; True if format is valid, False otherwise
     """
+
+def quarentine_traveler(traveler, country):
+    # list where each traveler has come from
+    # compare that to the corresponding entry in the list of countries for a medical advisory
+    # if the medical advisory returns blank, it passes
+    # the there is anything at all in the medical advisotry, return that the traveler should be quarentined
 
 
 decide(json_citizens, json_countries)
