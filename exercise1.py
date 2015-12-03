@@ -45,7 +45,6 @@ class UnknownAttributeException(Exception):
 def selection(t, f):
     selection_list =[]
     selection_list.append(t[0])
-
     for row in t[1:]:
         if f(row) is True:
             selection_list.append(row)
