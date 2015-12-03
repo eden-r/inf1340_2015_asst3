@@ -40,6 +40,11 @@ class UnknownAttributeException(Exception):
 
 
 def selection(t, f):
+    # takes the header for t
+    # applies f to each row in t
+    # takes the f(row) that returns true and attaches that to a new table
+    # returns the new table
+    # if f(row) does not return True, does not return a table / returns None?
     """
     Perform select operation on table t that satisfy condition f.
 
@@ -61,6 +66,10 @@ def selection(t, f):
 
 
 def projection(t, r):
+    # for each element entered into list r
+    # searches the hearder of t
+    # finds all values in that index of t[0][r[0]], etc
+    # adds them to a new table
     """
     Perform projection operation on table t
     using the attributes subset r.
@@ -81,6 +90,10 @@ def projection(t, r):
 
 
 def cross_product(t1, t2):
+    # takes the header of t1 and attaches it to the header of t2
+    # for each row in t1, appends each row of t2 to the end
+    # returns a new table
+
     """
     Return the cross-product of tables t1 and t2.
 
