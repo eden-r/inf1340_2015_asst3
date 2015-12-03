@@ -11,6 +11,9 @@ __copyright__ = "2015 Susan Sim"
 __license__ = "MIT License"
 
 
+
+
+
 #####################
 # HELPER FUNCTIONS ##
 #####################
@@ -53,6 +56,10 @@ def selection(t, f):
     output: table that contains rows that meet criteria of function
     assumptions: the output of the function that is being passed in is a Boolean (T/F)
 
+
+    Note: This can be ANY function, so long as it
+    You can use the function in the description for testing.
+
     Example:
     R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
     # Define function f that returns True if the last element in the row is greater than 3.
@@ -62,7 +69,13 @@ def selection(t, f):
 
     """
 
-    return []
+    selection_list =[]
+    selection_list.append(t[0])
+
+    for row in t[1:]:
+        if f(row) is True:
+            selection_list.append(row)
+    return selection_list
 
 
 def projection(t, r):
@@ -83,8 +96,9 @@ def projection(t, r):
     R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
     projection(R, ["A", "C"])
     [["A", "C"], [1, 3], [4, 6]]
-    
+
     """
+
 
     return []
 

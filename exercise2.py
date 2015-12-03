@@ -41,17 +41,6 @@ importing and making json files readable
 # stylize them so they print readably
 # name the different parts so the different functions can access them?
 
-with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
-    file_contents = file_reader.read()
-    json_citizens = json.loads(file_contents)
-with open("test_jsons/countries.json", "r") as file_reader:
-    file_contents = file_reader.read()
-    json_countries = json.loads(file_contents)
-
-#print json.dumps(json_citizens, indent=1)
-#print json.dumps(json_countries, indent=1)
-
-
 
 #####################
 # HELPER FUNCTIONS ##
@@ -72,29 +61,7 @@ def is_more_than_x_years_ago(x, date_string):
     return (date - x_years_ago).total_seconds() < 0
 
 
-"""
-FUNCTIONS TO BE WRITTEN
-"""
-
-
 def decide(input_file, countries_file):
-    citizen_no = 0
-    valid = False
-    for citizen in json_citizens:
-        passport_validity = valid_passport_format(citizen['passport'])
-        if passport_validity is True:
-            print("valid")
-        else:
-            print("False")
-        date_validity = valid_date_format(citizen['birth_date'])
-        if date_validity is True:
-            print("valid")
-        else:
-            print("False")
-
-
-
-
     """
     Decides whether a traveller's entry into Kanadia should be accepted
 
@@ -107,37 +74,19 @@ def decide(input_file, countries_file):
         "Accept", "Reject", and "Quarantine"
     """
 
-
+    return ["Reject"]
 
 
 def valid_passport_format(passport_number):
-    passport_regex = re.compile(r'(\w{5}-){4}\w{5}')
-    passport_match = passport_regex.search(passport_number)
-    if passport_match is None:
-        return False
-    else:
-        return True
-    # delineates valid regex for passport numbers
-    # imports passport number from json file
-    # tests passport number against regex
-    # returns True is passport is valid
-    # returns False if passport is not valid
     """
     Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
     :param passport_number: alpha-numeric string
     :return: Boolean; True if the format is valid, False otherwise
     """
-
-print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
-print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
+    return False
 
 
 def valid_visa_format(visa_code):
-    visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
-
-    # visa has two fields: date (YYYY-MM-DD) and code (five groups of five alphanumeric characters
-    # check visa regex against visa code
-    # returns false if not found, returns True if found
     """
     Checks whether a visa code is two groups of five alphanumeric characters
     :param visa_code: alphanumeric string
@@ -147,20 +96,11 @@ def valid_visa_format(visa_code):
 
 
 def valid_date_format(date_string):
-    date_regex = re.compile(r'\d{4}-\d{2}-\d{2}')
-    date_match = date_regex.search(date_string)
-    if date_match is None:
-        return False
-    else:
-        return True
-    # checks date regex against date string
-    # returns false if not found, returns True if found
     """
     Checks whether a date has the format YYYY-mm-dd in numbers
     :param date_string: date to be checked
     :return: Boolean True if the format is valid, False otherwise
     """
 
+    return False
 
-
-decide(json_citizens, json_countries)
