@@ -34,6 +34,14 @@ containing the following keys:
 COUNTRIES = None
 
 
+"""
+importing and making json files readable
+"""
+# open json file(s)
+# stylize them so they print readably
+# name the different parts so the different functions can access them?
+
+
 #####################
 # HELPER FUNCTIONS ##
 #####################
