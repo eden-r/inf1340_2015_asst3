@@ -131,8 +131,13 @@ def valid_passport_format(passport_number):
 print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
 print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
 
-def valid_visa_format(visa_code):
+def valid_visa_code_format(visa_code):
     visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
+    visa_match = visa_regex.search(visa_code)
+    if visa_match is None:
+        return False
+    else:
+        return True
 
     # visa has two fields: date (YYYY-MM-DD) and code (five groups of five alphanumeric characters
     # check visa regex against visa code
@@ -160,6 +165,22 @@ def valid_date_format(date_string):
     :return: Boolean True if the format is valid, False otherwise
     """
 
+def valid_visa_format(date_string, visa_code, x):
+    valid_date_format = valid_date_format(date_string)
+    valid_visa_code = valid_visa_code_format(visa_code)
+    valid_visa_date = is_more_than_x_years_ago(x, date_string)
+
+    if (valid_date_format and valid_visa_date and valid_visa_date) is True:
+        return True
+    else:
+        return False
+
+    """
+    Checks whether the entire visa format is valid
+    input: the date (date_string) and visa code (visa_code) of visitor's visa
+    :param valid_date_format(), valid_visa_format(), is_more_than_x_years_ago()
+    :return: Boolean; True if format is valid, False otherwise
+    """
 
 
 decide(json_citizens, json_countries)
