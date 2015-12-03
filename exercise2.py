@@ -88,6 +88,11 @@ def decide(input_file, countries_file):
 
 
 def valid_passport_format(passport_number):
+    # delineates valid regex for passport numbers
+    # imports passport number from json file
+    # tests passport number against regex
+    # returns True is passport is valid
+    # returns False if passport is not valid
     """
     Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
     :param passport_number: alpha-numeric string
