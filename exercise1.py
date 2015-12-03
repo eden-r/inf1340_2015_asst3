@@ -148,5 +148,16 @@ def cross_product(t1, t2):
 
     """
 
-    return []
+    t1_index = t1[0]
+    t2_index = t2[0]
+    new_table = []
+    if t1_index and t2_index < len(t1) and len(t2):
+        new_table = [] + ((t1_index) + (t2_index))
+        t1_index += 1
+        t2_index += 1
+        return new_table
+    else:
+        return ("None")
+
+
 
