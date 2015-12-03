@@ -51,6 +51,30 @@ with open("test_jsons/countries.json", "r") as file_reader2:
 #print json.dumps(json_citizens, indent=1)
 #print json.dumps(json_countries, indent=1)
 
+VISA_HAVERS = [
+  {
+    "passport": "JMZ0S-89IA9-OTCLY-MQILJ-P7CTY",
+    "first_name": "ELIZABETH",
+    "last_name": "WENDT",
+    "birth_date": "1958-08-22",
+    "home": {
+      "city": "Bala",
+      "region": "ON",
+      "country": "BRD"
+    },
+    "entry_reason": "returning",
+    "from": {
+      "city": "Weasel",
+      "region": "Rodent",
+      "country": "BRD"
+    },
+    "visa": {
+        "code": "JMZ0S-89IA9-OTCLY-MQILJ-P7CTY",
+        "date": "2015-11-11"
+    }
+  }
+]
+
 
 
 #####################
@@ -149,9 +173,8 @@ def valid_visa_code_format(visa_code):
 
     """
 
-
 def valid_date_format(date_string):
-    date_regex = re.compile(r'\d{4}-\d{2}-\d{2}')
+    date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
     date_match = date_regex.search(date_string)
     if date_match is None:
         return False
@@ -165,15 +188,30 @@ def valid_date_format(date_string):
     :return: Boolean True if the format is valid, False otherwise
     """
 
-def valid_visa_format(date_string, visa_code, x):
-    valid_date_correct = valid_date_format(date_string)
+def valid_visa_pls(traveler):
+    valid = False
+    visa_code = traveler['visa']['code']
+    visa_date = traveler['visa']['date']
     valid_visa_code = valid_visa_code_format(visa_code)
-    valid_visa_date = is_more_than_x_years_ago(x, date_string)
 
-    if (valid_date_correct and valid_visa_date and valid_visa_date) is True:
+    if valid_visa_code is True:
+        valid = True
+    else:
+        valid = False
+    return valid
+
+print valid_date_format("2014-11-11")
+print is_more_than_x_years_ago(7, "2014-11-11")
+
+def check_visa_date(x, visa_date):
+    valid = False
+    visa_formatted = valid_date_format(visa_date)
+    visa_expired = is_more_than_x_years_ago(x, visa_date)
+    if (visa_formatted and visa_expired) is True:
         return True
     else:
         return False
+
 
     """
     Checks whether the entire visa format is valid
@@ -181,6 +219,21 @@ def valid_visa_format(date_string, visa_code, x):
     :param valid_date_format(), valid_visa_format(), is_more_than_x_years_ago()
     :return: Boolean; True if format is valid, False otherwise
     """
+
+for a in VISA_HAVERS:
+    print a['visa']['code']
+    print valid_visa_pls(a)
+    b = a['visa']['date']
+    print check_visa_date(3, b)
+
+
+
+#def check_visa(traveler, valid_visa_format):
+#    if traveler['home']['country'] == "KAN":
+#        return True
+#    else:
+
+
 
 def quarantine_traveler(traveler, country):
     for a in json_citizens:
@@ -194,7 +247,7 @@ def quarantine_traveler(traveler, country):
     # if the medical advisory returns blank, it passes
     # the there is anything at all in the medical advisory, return that the traveler should be quarantined
 
-print quarantine_traveler(json_citizens, json_countries)
+#print quarantine_traveler(json_citizens, json_countries)
 
 #decide(json_citizens, json_countries)
 #print json.dumps(json_countries, indent=1)
