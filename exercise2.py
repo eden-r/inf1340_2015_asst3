@@ -44,9 +44,9 @@ importing and making json files readable
 with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
     file_contents = file_reader.read()
     json_citizens = json.loads(file_contents)
-with open("test_jsons/countries.json", "r") as file_reader:
-    file_contents = file_reader.read()
-    json_countries = json.loads(file_contents)
+with open("test_jsons/countries.json", "r") as file_reader2:
+    file_contents2 = file_reader2.read()
+    json_countries = json.loads(file_contents2)
 
 #print json.dumps(json_citizens, indent=1)
 #print json.dumps(json_countries, indent=1)
@@ -128,8 +128,8 @@ def valid_passport_format(passport_number):
     :return: Boolean; True if the format is valid, False otherwise
     """
 
-print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
-print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
+#print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
+#print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
 
 def valid_visa_code_format(visa_code):
     visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
@@ -182,11 +182,22 @@ def valid_visa_format(date_string, visa_code, x):
     :return: Boolean; True if format is valid, False otherwise
     """
 
-def quarentine_traveler(traveler, country):
+def quarantine_traveler(traveler, country):
+    for a in json_citizens:
+        b = a['from']['country']
+        if (json_countries[b]['medical_advisory']) == "":
+            print("None")
+        else:
+            print("Quarantine")
     # list where each traveler has come from
     # compare that to the corresponding entry in the list of countries for a medical advisory
     # if the medical advisory returns blank, it passes
-    # the there is anything at all in the medical advisotry, return that the traveler should be quarentined
+    # the there is anything at all in the medical advisory, return that the traveler should be quarantined
+
+print quarantine_traveler(json_citizens, json_countries)
+
+#decide(json_citizens, json_countries)
+#print json.dumps(json_countries, indent=1)
 
 
-decide(json_citizens, json_countries)
+
