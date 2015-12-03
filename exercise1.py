@@ -91,6 +91,8 @@ def projection(t, r):
             index = t[0].index(item)
         counter = 0
         for row in t:
+            if item != t[0][index]:
+                raise AttributeError
             if r.index(item) == 0:
                 new_table.append([row[index]])
             elif r.index(item) > 0:
