@@ -83,10 +83,16 @@ def decide(input_file, countries_file):
     for citizen in json_citizens:
         passport_validity = valid_passport_format(citizen['passport'])
         if passport_validity is True:
-            valid is True
+            print("valid")
+        else:
+            print("False")
         date_validity = valid_date_format(citizen['birth_date'])
         if date_validity is True:
-            valid is True
+            print("valid")
+        else:
+            print("False")
+
+
 
 
     """
@@ -154,7 +160,6 @@ def valid_date_format(date_string):
     :return: Boolean True if the format is valid, False otherwise
     """
 
-    return False
 
 
-print decide(json_citizens, json_countries)
+decide(json_citizens, json_countries)
