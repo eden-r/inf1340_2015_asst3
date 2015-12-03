@@ -33,6 +33,13 @@ R2 = [["Department", "Head"],
       ["production", "Mori"],
       ["sales", "Brown"]]
 
+VOTERS = [["Surname", "FirstName", "Age"],
+          ["Smith", "Sammy", 17],
+          ["Vasquez", "Maria", 23],
+          ["Allen", "Grant", 18],
+          ["Allen", "Bethany", 16],
+          ["Xun", "Lu", 47],
+          ["Qian", "Sima", 117]]
 
 #####################
 # HELPER FUNCTIONS ##
@@ -58,6 +65,10 @@ def filter_employees(row):
     :return: True if the row satisfies the condition.
     """
     return row[-2] >= 30 and row[-1] > 3500
+
+
+def filter_eligible_voters(row):
+    return row[-1] >= 18
 
 
 ###################
@@ -104,3 +115,30 @@ def test_cross_product():
               ["White", "production", "sales", "Brown"]]
 
     assert is_equal(result, cross_product(R1, R2))
+
+
+
+##################
+# OUR TEST CASES #
+##################
+
+def test_selection_by_team():
+    result = [["Surname", "FirstName", "Age"],
+          ["Vasquez", "Maria", 23],
+          ["Allen", "Grant", 18],
+          ["Xun", "Lu", 47],
+          ["Qian", "Sima", 117]]
+
+    assert is_equal(result, selection(VOTERS, filter_eligible_voters))
+
+def test_project_by_team():
+    result = [["Surname", "Age"],
+          ["Smith", 17],
+          ["Vasquez", 23],
+          ["Allen", 18],
+          ["Allen", 16],
+          ["Xun", 47],
+          ["Qian", 117]]
+
+    assert is_equal(result, projection(VOTERS, ["Surname", "Age"]))
+
