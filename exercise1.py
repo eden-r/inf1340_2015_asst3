@@ -43,6 +43,18 @@ class UnknownAttributeException(Exception):
 
 
 def selection(t, f):
+    selection_list =[]
+    selection_list.append(t[0])
+
+    for row in t[1:]:
+        if f(row) is True:
+            selection_list.append(row)
+    if len(selection_list) == 1:
+        return None
+    else:
+        return selection_list
+
+
     # takes the header for t
     # applies f to each row in t
     # takes the f(row) that returns true and attaches that to a new table
@@ -69,13 +81,7 @@ def selection(t, f):
 
     """
 
-    selection_list =[]
-    selection_list.append(t[0])
 
-    for row in t[1:]:
-        if f(row) is True:
-            selection_list.append(row)
-    return selection_list
 
 
 def projection(t, r):
