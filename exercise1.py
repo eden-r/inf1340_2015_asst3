@@ -79,6 +79,20 @@ def selection(t, f):
 
 
 def projection(t, r):
+    new_table = []
+    for item in r:
+        if item in t[0]:
+            index = t[0].index(item)
+        counter = 0
+        for row in t:
+            if r.index(item) == 0:
+                new_table.append([row[index]])
+            elif r.index(item) > 0:
+                new_table[counter].append(row[index])
+                counter += 1
+
+    return new_table
+
     # for each element entered into list r
     # searches the hearder of t
     # finds all values in that index of t[0][r[0]], etc
