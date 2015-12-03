@@ -87,7 +87,14 @@ def decide(input_file, countries_file):
     return ["Reject"]
 
 
+
 def valid_passport_format(passport_number):
+    passport_regex = re.compile(r'(\w{5}-){4}\w{5}')
+    passport_match = passport_regex.search(passport_number)
+    if passport_match is None:
+        return False
+    else:
+        return True
     # delineates valid regex for passport numbers
     # imports passport number from json file
     # tests passport number against regex
@@ -98,10 +105,14 @@ def valid_passport_format(passport_number):
     :param passport_number: alpha-numeric string
     :return: Boolean; True if the format is valid, False otherwise
     """
-    return False
 
+print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
+print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
 
 def valid_visa_format(visa_code):
+    visa_regex = re.compile(r'\w{5}-\w{5}')
+    # check visa regex against visa code
+    # returns false if not found, returns True if found
     """
     Checks whether a visa code is two groups of five alphanumeric characters
     :param visa_code: alphanumeric string
@@ -111,6 +122,9 @@ def valid_visa_format(visa_code):
 
 
 def valid_date_format(date_string):
+    date_regex = re.compile(r'\d{4}-\d{2}-\d{2}')
+    # checks date regex against date string
+    # returns false if not found, returns True if found
     """
     Checks whether a date has the format YYYY-mm-dd in numbers
     :param date_string: date to be checked
