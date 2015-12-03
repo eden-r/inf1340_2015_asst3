@@ -41,6 +41,16 @@ importing and making json files readable
 # stylize them so they print readably
 # name the different parts so the different functions can access them?
 
+with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
+    file_contents = file_reader.read()
+    json_citizens = json.loads(file_contents)
+with open("test_jsons/countries.json", "r") as file_reader:
+    file_contents = file_reader.read()
+    json_countries = json.loads(file_contents)
+
+print json.dumps(json_citizens, indent=1)
+print json.dumps(json_countries, indent=1)
+
 
 #####################
 # HELPER FUNCTIONS ##
