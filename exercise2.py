@@ -131,6 +131,7 @@ def valid_passport_format(passport_number):
 print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
 print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
 
+
 def valid_visa_format(visa_code):
     visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
 
