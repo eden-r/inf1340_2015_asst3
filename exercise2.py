@@ -93,7 +93,7 @@ def is_more_than_x_years_ago(x, date_string):
     x_years_ago = now.replace(year=now.year - x)
     date = datetime.datetime.strptime(date_string, '%Y-%m-%d')
 
-    return (date - x_years_ago).total_seconds() < 0
+    return (date - x_years_ago).total_seconds() > 0
 
 
 """
@@ -193,15 +193,14 @@ def valid_visa_pls(traveler):
     visa_code = traveler['visa']['code']
     visa_date = traveler['visa']['date']
     valid_visa_code = valid_visa_code_format(visa_code)
-
-    if valid_visa_code is True:
+    valid_visa_date = check_visa_date(2, visa_date)
+    if (valid_visa_code and valid_visa_date) is True:
         valid = True
     else:
         valid = False
     return valid
 
-print valid_date_format("2014-11-11")
-print is_more_than_x_years_ago(7, "2014-11-11")
+
 
 def check_visa_date(x, visa_date):
     valid = False
@@ -221,10 +220,8 @@ def check_visa_date(x, visa_date):
     """
 
 for a in VISA_HAVERS:
-    print a['visa']['code']
     print valid_visa_pls(a)
-    b = a['visa']['date']
-    print check_visa_date(3, b)
+
 
 
 
