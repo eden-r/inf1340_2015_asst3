@@ -41,6 +41,12 @@ VOTERS = [["Surname", "FirstName", "Age"],
           ["Xun", "Lu", 47],
           ["Qian", "Sima", 117]]
 
+CANDIDATES = [["Candidate", "Party"],
+              ["Justin Trudeau", "Liberal"],
+              ["Stephen Harper", "Conservative"],
+              ["Tom Mulcair", "NDP"]]
+
+
 #####################
 # HELPER FUNCTIONS ##
 #####################
@@ -142,3 +148,43 @@ def test_project_by_team():
 
     assert is_equal(result, projection(VOTERS, ["Surname", "Age"]))
 
+def test_cross_product_by_team():
+    result = [["Surname", "FirstName", "Age", "Candidate", "Party"],
+            ["Smith", "Sammy", 17, "Justin Trudeau", "Liberal"],
+            ["Smith", "Sammy", 17, "Stephen Harper", "Conservative"],
+            ["Smith", "Sammy", 17, "Tom Mulcair", "NDP"],
+            ["Vasquez", "Maria", 23, "Justin Trudeau", "Liberal"],
+            ["Vasquez", "Maria", 23, "Stephen Harper", "Conservative"],
+            ["Vasquez", "Maria", 23, "Tom Mulcair", "NDP"],
+            ["Allen", "Grant", 18,"Justin Trudeau", "Liberal"],
+            ["Allen", "Grant", 18, "Stephen Harper", "Conservative"],
+            ["Allen", "Grant", 18, "Tom Mulcair", "NDP"],
+            ["Allen", "Bethany", 16, "Justin Trudeau", "Liberal"],
+            ["Allen", "Bethany", 16, "Stephen Harper", "Conservative"],
+            ["Allen", "Bethany", 16, "Tom Mulcair", "NDP"],
+            ["Xun", "Lu", 47, "Justin Trudeau", "Liberal"],
+            ["Xun", "Lu", 47, "Stephen Harper", "Conservative"],
+            ["Xun", "Lu", 47, "Tom Mulcair", "NDP"],
+            ["Qian", "Sima", 117, "Justin Trudeau", "Liberal"],
+            ["Qian", "Sima", 117, "Stephen Harper", "Conservative"],
+            ["Qian", "Sima", 117, "Tom Mulcair", "NDP"]]
+
+    assert is_equal(result, cross_product(VOTERS, CANDIDATES))
+
+
+def test_selection_returns_nothing():
+    t = [["Name", "Age"],
+         ["Bob", 47],
+         ["Mary", 65],
+         ["Carla", 54]]
+
+    def f(r):
+        return r[-1] < 35
+
+    assert selection(t,f) == None
+
+def test_projection_returns_error():
+    try:
+        projection(VOTERS, ["Age", "Riding"])
+    except AttributeError:
+        assert True
