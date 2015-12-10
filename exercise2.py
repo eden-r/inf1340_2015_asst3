@@ -204,7 +204,7 @@ def check_visa(traveler, valid_visa_format):
     else:
 
 
-#for a in VISA_HAVERS:
+# for a in VISA_HAVERS:
 #   print valid_visa_pls(a)
 
 
