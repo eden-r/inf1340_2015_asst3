@@ -51,31 +51,22 @@ with open("test_jsons/countries.json", "r") as file_reader2:
 #print json.dumps(json_citizens, indent=1)
 #print json.dumps(json_countries, indent=1)
 
-VISA_HAVERS = [
-  {
-    "passport": "JMZ0S-89IA9-OTCLY-MQILJ-P7CTY",
-    "first_name": "ELIZABETH",
-    "last_name": "WENDT",
-    "birth_date": "1958-08-22",
-    "home": {
-      "city": "Bala",
-      "region": "ON",
-      "country": "BRD"
-    },
-    "entry_reason": "returning",
-    "from": {
-      "city": "Weasel",
-      "region": "Rodent",
-      "country": "BRD"
-    },
-    "visa": {
-        "code": "JMZ0S-89IA9-OTCLY-MQILJ-P7CTY",
-        "date": "2015-11-11"
-    }
-  }
-]
 
 
+incoming_foreigners = "test_jsons/test_incoming_foreigner.json"
+
+"""
+WRITING TO JSON FILES
+
+# to overwrite the existing "test_incoming_foreigner.json" file:
+
+with open(incoming_foreigners, "w") as output:
+    json.dump(VISA_HAVERS, output, sort_keys=True, indent=1)
+
+with open(incoming_foreigners[0], mode='w') as feeds:
+    for item in VISA_HAVERS:
+        json.dump(item, feeds, sort_keys=True, indent=1)
+"""
 
 #####################
 # HELPER FUNCTIONS ##
@@ -100,6 +91,7 @@ def is_more_than_x_years_ago(x, date_string):
 FUNCTIONS TO BE WRITTEN
 """
 
+print(is_more_than_x_years_ago(2, "2015-11-11"))
 
 def decide(input_file, countries_file):
     citizen_no = 0
