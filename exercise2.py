@@ -25,21 +25,15 @@ REQUIRED_FIELDS = ["passport", "first_name", "last_name",
 ## global variables ##
 ######################
 '''
-countries:
-dictionary mapping country codes (lowercase strings) to dictionaries
-containing the following keys:
-"code","name","visitor_visa_required",
-"transit_visa_required","medical_advisory"
+countries: dictionary mapping country codes (lowercase strings) to dictionaries containing the following keys:
+"code","name","visitor_visa_required", "transit_visa_required","medical_advisory"
 '''
 COUNTRIES = None
 
 
 """
-importing and making json files readable
+importing and making json files readable, naming different parts so that different functions can access them
 """
-# open json file(s)
-# stylize them so they print readably
-# name the different parts so the different functions can access them?
 
 with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
     file_contents = file_reader.read()
@@ -73,7 +67,7 @@ with open(incoming_foreigners[0], mode='w') as feeds:
 #####################
 def is_more_than_x_years_ago(x, date_string):
     """
-    Check if date is less than x years ago.
+    Checks if date is less than x years ago.
 
     :param x: int representing years
     :param date_string: a date string in format "YYYY-mm-dd"
@@ -86,14 +80,17 @@ def is_more_than_x_years_ago(x, date_string):
 
     return (date - x_years_ago).total_seconds() > 0
 
-
-"""
-FUNCTIONS TO BE WRITTEN
-"""
-
-print(is_more_than_x_years_ago(2, "2015-11-11"))
-
 def decide(input_file, countries_file):
+    """
+     Decides whether a traveller's entry into Kanadia should be accepted
+
+    :param input_file: The name of a JSON formatted file that contains cases to decide
+    :param countries_file: The name of a JSON formatted file that contains country data, such as whether an entry or transit visa is required, and whether there is currently a medical advisory
+    :return: List of strings. Possible values of strings are:
+        "Accept", "Reject", and "Quarantine"
+
+    """
+
     citizen_no = 0
     valid = False
     for citizen in json_citizens:
@@ -108,46 +105,33 @@ def decide(input_file, countries_file):
         else:
             print("False")
 
-
-
-
-    """
-    Decides whether a traveller's entry into Kanadia should be accepted
-
-    :param input_file: The name of a JSON formatted file that contains
-        cases to decide
-    :param countries_file: The name of a JSON formatted file that contains
-        country data, such as whether an entry or transit visa is required,
-        and whether there is currently a medical advisory
-    :return: List of strings. Possible values of strings are:
-        "Accept", "Reject", and "Quarantine"
-    """
-
-
-
-
 def valid_passport_format(passport_number):
+    """
+    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes. Imports passport
+    number from json file and tests passport number against regex.
+
+    :param passport_number: alpha-numeric string
+    :return: Boolean; True if the format is valid, False otherwise
+
+    """
+
     passport_regex = re.compile(r'(\w{5}-){4}\w{5}')
     passport_match = passport_regex.search(passport_number)
     if passport_match is None:
         return False
     else:
         return True
-    # delineates valid regex for passport numbers
-    # imports passport number from json file
-    # tests passport number against regex
-    # returns True is passport is valid
-    # returns False if passport is not valid
-    """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
-    :param passport_number: alpha-numeric string
-    :return: Boolean; True if the format is valid, False otherwise
-    """
-
-#print valid_passport_format("wwwww-wwwww-wwwww-wwwww-wwwww")
-#print valid_passport_format("wwww-wwww-wwww-wwww-wwww")
 
 def valid_visa_code_format(visa_code):
+    """
+    Checks visa regex against visa code, ensuring visa code has two groups of five alphanumerical characters
+
+    :param visa_code: alpha-numberic string
+    :return: Boolean; True if the format is valid, False otherwise
+
+    """
+
+
     visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
     visa_match = visa_regex.search(visa_code)
     if visa_match is None:
@@ -155,32 +139,30 @@ def valid_visa_code_format(visa_code):
     else:
         return True
 
-    # visa has two fields: date (YYYY-MM-DD) and code (five groups of five alphanumeric characters
-    # check visa regex against visa code
-    # returns false if not found, returns True if found
+
+
+def valid_date_format(date_string):
     """
-    Checks whether a visa code is two groups of five alphanumeric characters
-    :param visa_code: alphanumeric string
+    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
+    :param date_string: date to be checked
     :return: Boolean; True if the format is valid, False otherwise
 
     """
 
-def valid_date_format(date_string):
     date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
     date_match = date_regex.search(date_string)
     if date_match is None:
         return False
     else:
         return True
-    # checks date regex against date string
-    # returns false if not found, returns True if found
-    """
-    Checks whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean True if the format is valid, False otherwise
-    """
 
 def valid_visa_pls(traveler):
+    """
+    Checks whether the entire visa format is valid
+
+    :param traveler: visa code & visa date
+    :return: Boolean; True if valid, False otherwise
+    """
     valid = False
     visa_code = traveler['visa']['code']
     visa_date = traveler['visa']['date']
@@ -195,6 +177,13 @@ def valid_visa_pls(traveler):
 
 
 def check_visa_date(x, visa_date):
+    """
+
+    :param x:
+    :param visa_date:
+    :return: Boolean; True if valid, False otherwise
+    """
+
     valid = False
     visa_formatted = valid_date_format(visa_date)
     visa_expired = is_more_than_x_years_ago(x, visa_date)
@@ -203,28 +192,30 @@ def check_visa_date(x, visa_date):
     else:
         return False
 
-
-    """
-    Checks whether the entire visa format is valid
-    input: the date (date_string) and visa code (visa_code) of visitor's visa
-    :param valid_date_format(), valid_visa_format(), is_more_than_x_years_ago()
-    :return: Boolean; True if format is valid, False otherwise
+def check_visa(traveler, valid_visa_format):
     """
 
-for a in VISA_HAVERS:
-    print valid_visa_pls(a)
+    :param traveler:
+    :param valid_visa_format:
+    :return:
+    """
+    if traveler['home']['country'] == "KAN":
+        return True
+    else:
 
 
-
-
-#def check_visa(traveler, valid_visa_format):
-#    if traveler['home']['country'] == "KAN":
-#        return True
-#    else:
+#for a in VISA_HAVERS:
+#   print valid_visa_pls(a)
 
 
 
 def quarantine_traveler(traveler, country):
+    """
+
+    :param traveler:
+    :param country:
+    :return:
+    """
     for a in json_citizens:
         b = a['from']['country']
         if (json_countries[b]['medical_advisory']) == "":
@@ -235,11 +226,3 @@ def quarantine_traveler(traveler, country):
     # compare that to the corresponding entry in the list of countries for a medical advisory
     # if the medical advisory returns blank, it passes
     # the there is anything at all in the medical advisory, return that the traveler should be quarantined
-
-#print quarantine_traveler(json_citizens, json_countries)
-
-#decide(json_citizens, json_countries)
-#print json.dumps(json_countries, indent=1)
-
-
-
