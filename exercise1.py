@@ -134,8 +134,10 @@ def cross_product(t1, t2):
             new_table += [t1[t1_i] + t2[t2_i]]
             t2_i += 1
         t1_i += 1
-    return new_table
-
+    if len(new_table) == 1:
+        return None
+    else:
+        return new_table
 
     # this would only return a table with [[t1[0], t2[0]], [t1[1], t2[1]], [t1[2], t2[2]]]
     #if t1_index and t2_index < len(t1) and len(t2):

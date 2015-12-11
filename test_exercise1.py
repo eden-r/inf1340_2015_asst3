@@ -188,3 +188,12 @@ def test_projection_returns_error():
         projection(VOTERS, ["Age", "Riding"])
     except AttributeError:
         assert True
+
+def test_cross_product_returns_nothing():
+    t1 = [["Name", "Age"],
+         ["Bob", 47],
+         ["Mary", 65],
+         ["Carla", 54]]
+    t2 = [["Name", "Age"]]
+
+    assert cross_product(t1,t2) == None
