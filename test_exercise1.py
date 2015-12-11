@@ -128,7 +128,9 @@ def test_cross_product():
 # OUR TEST CASES #
 ##################
 
-def test_selection_by_team():
+
+def test_selection_team_test():
+    # Tests select operation
     result = [["Surname", "FirstName", "Age"],
           ["Vasquez", "Maria", 23],
           ["Allen", "Grant", 18],
@@ -137,7 +139,8 @@ def test_selection_by_team():
 
     assert is_equal(result, selection(VOTERS, filter_eligible_voters))
 
-def test_project_by_team():
+def test_projection_team_test():
+    # Tests projection operation
     result = [["Surname", "Age"],
           ["Smith", 17],
           ["Vasquez", 23],
@@ -148,7 +151,8 @@ def test_project_by_team():
 
     assert is_equal(result, projection(VOTERS, ["Surname", "Age"]))
 
-def test_cross_product_by_team():
+def test_cross_product_team_test():
+    #Tests cross product operation
     result = [["Surname", "FirstName", "Age", "Candidate", "Party"],
             ["Smith", "Sammy", 17, "Justin Trudeau", "Liberal"],
             ["Smith", "Sammy", 17, "Stephen Harper", "Conservative"],
@@ -173,6 +177,7 @@ def test_cross_product_by_team():
 
 
 def test_selection_returns_nothing():
+    #Tests whether selection() function returns None if result is empty table
     t = [["Name", "Age"],
          ["Bob", 47],
          ["Mary", 65],
@@ -184,12 +189,14 @@ def test_selection_returns_nothing():
     assert selection(t,f) == None
 
 def test_projection_returns_error():
+     #Tests whether projection() function raises AttributeError if column is in attributes list but not table1
     try:
         projection(VOTERS, ["Age", "Riding"])
     except AttributeError:
         assert True
 
 def test_cross_product_returns_nothing():
+     #Tests whether cross_product() function returns None if result is empty table
     t1 = [["Name", "Age"],
          ["Bob", 47],
          ["Mary", 65],
