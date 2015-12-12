@@ -25,8 +25,11 @@ REQUIRED_FIELDS = ["passport", "first_name", "last_name",
 ## global variables ##
 ######################
 '''
-countries: dictionary mapping country codes (lowercase strings) to dictionaries containing the following keys:
-"code","name","visitor_visa_required", "transit_visa_required","medical_advisory"
+countries:
+dictionary mapping country codes (lowercase strings) to dictionaries
+containing the following keys:
+"code","name","visitor_visa_required",
+"transit_visa_required","medical_advisory"
 '''
 COUNTRIES = None
 
@@ -122,6 +125,7 @@ def valid_passport_format(passport_number):
     else:
         return True
 
+
 def valid_visa_code_format(visa_code):
     """
     Checks visa regex against visa code, ensuring visa code has two groups of five alphanumerical characters
@@ -131,14 +135,12 @@ def valid_visa_code_format(visa_code):
 
     """
 
-
     visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
     visa_match = visa_regex.search(visa_code)
     if visa_match is None:
         return False
     else:
         return True
-
 
 
 def valid_date_format(date_string):
@@ -156,6 +158,7 @@ def valid_date_format(date_string):
     else:
         return True
 
+
 def valid_visa_pls(traveler):
     """
     Checks whether the entire visa format is valid
@@ -163,6 +166,7 @@ def valid_visa_pls(traveler):
     :param traveler: visa code & visa date
     :return: Boolean; True if valid, False otherwise
     """
+
     valid = False
     visa_code = traveler['visa']['code']
     visa_date = traveler['visa']['date']
@@ -173,7 +177,6 @@ def valid_visa_pls(traveler):
     else:
         valid = False
     return valid
-
 
 
 def check_visa_date(x, visa_date):
@@ -192,6 +195,11 @@ def check_visa_date(x, visa_date):
     else:
         return False
 
+    # checks visa date validity
+    # valid visa date is one that is less than two years old as per assignment instructions
+    # if the visa date format is True, the visa is still valid
+
+
 def check_visa(traveler, valid_visa_format):
     """
 
@@ -199,14 +207,14 @@ def check_visa(traveler, valid_visa_format):
     :param valid_visa_format:
     :return:
     """
+
     if traveler['home']['country'] == "KAN":
         return True
     else:
 
 
-# for a in VISA_HAVERS:
-#   print valid_visa_pls(a)
-
+    # for a in VISA_HAVERS:
+    # print valid_visa_pls(a)
 
 
 def quarantine_traveler(traveler, country):
@@ -216,13 +224,15 @@ def quarantine_traveler(traveler, country):
     :param country:
     :return:
     """
+
     for a in json_citizens:
         b = a['from']['country']
         if (json_countries[b]['medical_advisory']) == "":
             print("None")
         else:
             print("Quarantine")
+
     # list where each traveler has come from
     # compare that to the corresponding entry in the list of countries for a medical advisory
     # if the medical advisory returns blank, it passes
-    # the there is anything at all in the medical advisory, return that the traveler should be quarantined
+    # if there is anything at all in the medical advisory, return that the traveler should be quarantined
