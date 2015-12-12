@@ -139,14 +139,7 @@ def cross_product(t1, t2):
     else:
         return new_table
 
-    # this would only return a table with [[t1[0], t2[0]], [t1[1], t2[1]], [t1[2], t2[2]]]
-    #if t1_index and t2_index < len(t1) and len(t2):
-    #new_table = [] + ((t1_index) + (t2_index))
-    #t1_index += 1
-    #t2_index += 1
-    #return new_table
-
-        # takes the header of t1 and attaches it to the header of t2
+    # takes the header of t1 and attaches it to the header of t2
     # for each row in t1, appends each row of t2 to the end
     # returns a new table
 
