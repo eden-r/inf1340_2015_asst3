@@ -199,7 +199,6 @@ def check_visa_date(x, visa_date):
     # valid visa date is one that is less than two years old as per assignment instructions
     # if the visa date format is True, the visa is still valid
 
-
 def check_visa(traveler, valid_visa_format):
     """
 
