@@ -107,21 +107,6 @@ def valid_visa_code_format(visa_code):
         return True
 
 
-def check_visa_date(x, visa_date):
-    """
-
-    :param x:
-    :param visa_date:
-    :return: Boolean; True if valid, False otherwise
-    """
-
-    valid = False
-    visa_formatted = valid_date_format(visa_date)
-    visa_expired = is_more_than_x_years_ago(x, visa_date)
-    if (visa_formatted and visa_expired) is True:
-        return True
-    else:
-        return False
 
     # checks visa date validity
     # valid visa date is one that is less than two years old as per assignment instructions
@@ -135,14 +120,11 @@ def check_if_valid_visa(traveler):
     :return: Boolean; True if valid, False otherwise
     """
 
-    visa_code = traveler['visa']['code']
-    visa_date = traveler['visa']['date']
-    valid_visa_code = valid_visa_code_format(visa_code)
-    visa_date_formatted = valid_date_format(visa_date)
-    valid_visa_date = is_more_than_x_years_ago(2, visa_date)
-    if valid_visa_code is True:
-        if visa_date_formatted is True:
-            if valid_visa_date is True:
+
+    visa_to_check = traveler['visa']
+    if valid_visa_code_format(visa_to_check['code']) is True:
+        if valid_date_format(visa_to_check['date']) is True:
+            if is_more_than_x_years_ago(2, visa_to_check['date']) is True:
                 return True
             else:
                 return False
@@ -185,6 +167,8 @@ def check_visa(traveler):
 
 
 
+
+
 def check_location_is_known(traveler):
     """
     Checks that the location in the traveler's entry is in countries list
@@ -207,25 +191,19 @@ def quarantine_traveler(traveler):
     :return:
     """
     MissingCountry = False
-    from_country = traveler['from']['country']
-    try:
-        if (COUNTRIES[from_country]['medical_advisory']) == "":
-            return False
-            try:
-                via_country = traveler['via']['country']
-                if COUNTRIES[via_country]['medical_advisory'] == "":
-                    return False
-                else:
-                    return True
-            except KeyError:
-                MissingCountry = True
-        else:
-            return True
-    except KeyError:
-        MissingCountry = True
 
-    if MissingCountry is True:
-        return "Reject"
+    from_country = traveler['from']['country']
+    if (COUNTRIES[from_country]['medical_advisory']) == "":
+        try:
+            via_country = traveler['via']['country']
+            if COUNTRIES[via_country]['medical_advisory'] == "":
+                return False
+            else:
+                return True
+        except KeyError:
+            return False
+    else:
+        return True
 
 
     # list where each traveler has come from
@@ -295,11 +273,7 @@ def decide(input_file, countries_file):
             if accept is True:
                 accept = check_visa(person)
         quarantine = quarantine_traveler(person)
-        if quarantine == "Reject":
-            quarantine = False
-            accept = False
-        else:
-            accept = True
+
 
 
 
