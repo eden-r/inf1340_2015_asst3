@@ -34,39 +34,6 @@ containing the following keys:
 COUNTRIES = None
 
 
-"""
-importing and making json files readable, naming different parts so that different functions can access them
-"""
-
-with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
-    file_contents = file_reader.read()
-    json_citizens = json.loads(file_contents)
-with open("test_jsons/countries.json", "r") as file_reader2:
-    file_contents2 = file_reader2.read()
-    json_countries = json.loads(file_contents2)
-
-with open("test_jsons/test_incoming_foreigner.json", "r") as a:
-    b = a.read()
-    json_foreigners = json.loads(b)
-#print json.dumps(json_citizens, indent=1)
-#print json.dumps(json_countries, indent=1)
-
-
-
-incoming_foreigners = "test_jsons/test_incoming_foreigner.json"
-
-"""
-WRITING TO JSON FILES
-
-# to overwrite the existing "test_incoming_foreigner.json" file:
-
-with open(incoming_foreigners, "w") as output:
-    json.dump(VISA_HAVERS, output, sort_keys=True, indent=1)
-
-with open(incoming_foreigners[0], mode='w') as feeds:
-    for item in VISA_HAVERS:
-        json.dump(item, feeds, sort_keys=True, indent=1)
-"""
 
 #####################
 # HELPER FUNCTIONS ##
@@ -88,7 +55,20 @@ def is_more_than_x_years_ago(x, date_string):
 
 
 
+def valid_date_format(date_string):
+    """
+    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
+    :param date_string: date to be checked
+    :return: Boolean; True if the format is valid, False otherwise
 
+    """
+
+    date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
+    date_match = date_regex.search(date_string)
+    if date_match is None:
+        return False
+    else:
+        return True
 
 
 
@@ -127,21 +107,25 @@ def valid_visa_code_format(visa_code):
         return True
 
 
-def valid_date_format(date_string):
-    """
-    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean; True if the format is valid, False otherwise
-
+def check_visa_date(x, visa_date):
     """
 
-    date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
-    date_match = date_regex.search(date_string)
-    if date_match is None:
-        return False
-    else:
+    :param x:
+    :param visa_date:
+    :return: Boolean; True if valid, False otherwise
+    """
+
+    valid = False
+    visa_formatted = valid_date_format(visa_date)
+    visa_expired = is_more_than_x_years_ago(x, visa_date)
+    if (visa_formatted and visa_expired) is True:
         return True
+    else:
+        return False
 
+    # checks visa date validity
+    # valid visa date is one that is less than two years old as per assignment instructions
+    # if the visa date format is True, the visa is still valid
 
 def check_if_valid_visa(traveler):
     """
@@ -168,25 +152,6 @@ def check_if_valid_visa(traveler):
         return False
 
 
-def check_visa_date(x, visa_date):
-    """
-
-    :param x:
-    :param visa_date:
-    :return: Boolean; True if valid, False otherwise
-    """
-
-    valid = False
-    visa_formatted = valid_date_format(visa_date)
-    visa_expired = is_more_than_x_years_ago(x, visa_date)
-    if (visa_formatted and visa_expired) is True:
-        return True
-    else:
-        return False
-
-    # checks visa date validity
-    # valid visa date is one that is less than two years old as per assignment instructions
-    # if the visa date format is True, the visa is still valid
 
 
 def check_visa(traveler, countries):
@@ -216,14 +181,12 @@ def check_visa(traveler, countries):
         return "Oops"
 
 
-for a in json_foreigners:
-    print check_visa(a, json_countries)
 
     # for a in VISA_HAVERS:
     # print valid_visa_pls(a)
 
 
-def quarantine_traveler(traveler, countries):
+def quarantine_traveler(traveler):
     """
 
     :param traveler:
@@ -232,11 +195,11 @@ def quarantine_traveler(traveler, countries):
     """
 
     from_country = traveler['from']['country']
-    if (countries[from_country]['medical_advisory']) == "":
+    if (COUNTRIES[from_country]['medical_advisory']) == "":
         return False
         try:
             via_country = traveler['via']['country']
-            if countries[via_country]['medical_advisory'] == "":
+            if COUNTRIES[via_country]['medical_advisory'] == "":
                 return False
             else:
                 return True
@@ -298,17 +261,19 @@ def decide(input_file, countries_file):
         travelers = json.loads(b)
     with open(countries_file, 'r') as a:
         b = a.read()
-        countries = json.loads(b)
+        global COUNTRIES
+        COUNTRIES = json.loads(b)
 
     for person in travelers:
         accept = True
         quarantine = False
 
-        quarantine = quarantine_traveler(person, countries)
+        quarantine = quarantine_traveler(person)
         if quarantine is True:
-            return True
+            results_list.append("T")
         else:
-            return False
+            results_list.append("F")
+    return results_list
         # check for required fields
         # check for valid passport
         # check home country / valid visa
@@ -319,5 +284,5 @@ testcountries = "test_jsons/countries.json"
 returningcitizens = "test_jsons/test_returning_citizen.json"
 incomingforners = "test_jsons/test_incoming_foreigner.json"
 
-print decide(incomingforners, testcountries)
 print decide(returningcitizens, testcountries)
+print decide(incomingforners, testcountries)
