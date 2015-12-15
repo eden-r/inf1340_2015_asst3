@@ -74,7 +74,7 @@ def valid_date_format(date_string):
 
 def valid_passport_format(passport_number):
     """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes. Imports passport
+    Checks whether a passport number is five sets of five alpha-number characters separated by dashes. Imports passport
     number from json file and tests passport number against regex.
 
     :param passport_number: alpha-numeric string
@@ -158,7 +158,6 @@ def check_visa(traveler):
     """
 
     :param traveler:
-    :param valid_visa_format:
     :return:
     """
     home_country = traveler['home']['country']
@@ -183,8 +182,6 @@ def check_visa(traveler):
     else:
         return False
 
-
-
 def check_location_is_known(traveler):
     """
     Checks that the location in the traveler's entry is in countries list
@@ -203,7 +200,6 @@ def check_location_is_known(traveler):
 def quarantine_traveler(traveler):
     """
     :param traveler:
-    :param country:
     :return:
     """
     MissingCountry = False
@@ -256,11 +252,6 @@ def check_entry_completeness(traveler):
         except KeyError:
             return False
     return complete
-
-
-
-
-
 
 
 def decide(input_file, countries_file):
