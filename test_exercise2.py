@@ -32,4 +32,4 @@ def test_incoming():
     """
 
     assert decide("test_incoming_foreigner.json", "countries.json") ==\
-        ["Accept"]
+           ['Accept', 'Reject', 'Quarantine', 'Accept']
