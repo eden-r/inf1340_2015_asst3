@@ -185,12 +185,23 @@ def check_visa(traveler):
 
 
 
+def check_location_is_known(traveler):
+    """
+    Checks that the location in the traveler's entry is in countries list
 
+    :param traveler: home country and from country
+    :return: Boolean; True if location known, returns False otherwise
+    """
+    home_location = traveler['home']['country']
+    from_location = traveler['from']['country']
 
+    if home_location in COUNTRIES:
+        return True
+    else:
+        return False
 
 def quarantine_traveler(traveler):
     """
-
     :param traveler:
     :param country:
     :return:
@@ -245,7 +256,6 @@ def check_entry_completeness(traveler):
         except KeyError:
             return False
     return complete
-
 
 
 
