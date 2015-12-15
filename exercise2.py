@@ -154,7 +154,7 @@ def check_if_valid_visa(traveler):
 
 
 
-def check_visa(traveler, countries):
+def check_visa(traveler):
     """
 
     :param traveler:
@@ -169,21 +169,23 @@ def check_visa(traveler, countries):
         else:
             return False
     elif traveler['entry_reason'] == "visit":
-        if countries[home_country]['visitor_visa_required'] == "0":
-            return True
-        elif countries[home_country]['visitor_visa_required'] == "1":
-            try:
-                valid = check_if_valid_visa(traveler)
-                return valid
-            except KeyError:
-                return False
+        try:
+            if COUNTRIES[home_country]['visitor_visa_required'] == "0":
+                return True
+            elif COUNTRIES[home_country]['visitor_visa_required'] == "1":
+                try:
+                    valid = check_if_valid_visa(traveler)
+                    return valid
+                except KeyError:
+                    return False
+        except KeyError:
+            return False
     else:
-        return "Oops"
+        return False
 
 
 
-    # for a in VISA_HAVERS:
-    # print valid_visa_pls(a)
+
 
 
 def quarantine_traveler(traveler):
@@ -193,20 +195,26 @@ def quarantine_traveler(traveler):
     :param country:
     :return:
     """
-
+    MissingCountry = False
     from_country = traveler['from']['country']
-    if (COUNTRIES[from_country]['medical_advisory']) == "":
-        return False
-        try:
-            via_country = traveler['via']['country']
-            if COUNTRIES[via_country]['medical_advisory'] == "":
-                return False
-            else:
-                return True
-        except KeyError:
+    try:
+        if (COUNTRIES[from_country]['medical_advisory']) == "":
             return False
-    else:
-        return True
+            try:
+                via_country = traveler['via']['country']
+                if COUNTRIES[via_country]['medical_advisory'] == "":
+                    return False
+                else:
+                    return True
+            except KeyError:
+                MissingCountry = True
+        else:
+            return True
+    except KeyError:
+        MissingCountry = True
+
+    if MissingCountry is True:
+        return "Reject"
 
 
     # list where each traveler has come from
@@ -214,27 +222,30 @@ def quarantine_traveler(traveler):
     # if the medical advisory returns blank, it passes
     # if there is anything at all in the medical advisory, return that the traveler should be quarantined
 
-def check_entry_completeness(REQUIRED_FIELDS, traveler):
+def check_entry_completeness(traveler):
     """
     Checks that traveler entry record is complete and that the date format is valid.
     :param: REQUIRED_FIELDS,traveler
     :return: Boolean; True if valid, False otherwise
     :raises: KeyError
     """
+    complete = False
     for entry in REQUIRED_FIELDS:
         try:
             j = traveler[entry]
             if len(j) > 1:
-                return True
-        except KeyError:
-            return True
-        try:
-           if valid_date_format(traveler["birth_date"]) == True:
-               return True
-           else:
-               return False
+                complete = True
+            try:
+                if valid_date_format(traveler["birth_date"]) is True:
+                    complete = True
+                else:
+                    return False
+            except KeyError:
+                return False
         except KeyError:
             return False
+    return complete
+
 
 
 
@@ -268,11 +279,31 @@ def decide(input_file, countries_file):
         accept = True
         quarantine = False
 
+        accept = check_entry_completeness(person)
+        if accept is True:
+            accept = valid_passport_format(person['passport'])
+            if accept is True:
+                accept = check_visa(person)
         quarantine = quarantine_traveler(person)
-        if quarantine is True:
-            results_list.append("T")
+        if quarantine == "Reject":
+            quarantine = False
+            accept = False
         else:
-            results_list.append("F")
+            accept = True
+
+
+
+    # return according to the priority ranking 1) Quarantine 2) Reject 3) Accept
+        if (quarantine is True) and (accept is True):
+            results_list.append("Quarantine")
+        elif (quarantine is True) and (accept is False):
+            results_list.append("Quarantine")
+        elif (quarantine is False) and (accept is False):
+            results_list.append("Reject")
+        elif (quarantine is False) and (accept is True):
+            results_list.append("Accept")
+
+
     return results_list
         # check for required fields
         # check for valid passport
