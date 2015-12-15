@@ -74,13 +74,13 @@
     },
     "entry_reason": "visit",
     "visa": {
-      "date": "2015-12-31",
+      "date": "2015-12-01",
       "code": "CFR6X-XSMVA"
     },
     "from": {
       "city": "a",
       "region": "a",
-      "country": "CFR"
+      "country": "KRA"
     }
   }
 ]
