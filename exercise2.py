@@ -34,36 +34,6 @@ containing the following keys:
 COUNTRIES = None
 
 
-"""
-importing and making json files readable, naming different parts so that different functions can access them
-"""
-
-with open("test_jsons/test_returning_citizen.json", "r") as file_reader:
-    file_contents = file_reader.read()
-    json_citizens = json.loads(file_contents)
-with open("test_jsons/countries.json", "r") as file_reader2:
-    file_contents2 = file_reader2.read()
-    json_countries = json.loads(file_contents2)
-
-#print json.dumps(json_citizens, indent=1)
-#print json.dumps(json_countries, indent=1)
-
-
-
-incoming_foreigners = "test_jsons/test_incoming_foreigner.json"
-
-"""
-WRITING TO JSON FILES
-
-# to overwrite the existing "test_incoming_foreigner.json" file:
-
-with open(incoming_foreigners, "w") as output:
-    json.dump(VISA_HAVERS, output, sort_keys=True, indent=1)
-
-with open(incoming_foreigners[0], mode='w') as feeds:
-    for item in VISA_HAVERS:
-        json.dump(item, feeds, sort_keys=True, indent=1)
-"""
 
 #####################
 # HELPER FUNCTIONS ##
@@ -83,30 +53,23 @@ def is_more_than_x_years_ago(x, date_string):
 
     return (date - x_years_ago).total_seconds() > 0
 
-def decide(input_file, countries_file):
+
+
+def valid_date_format(date_string):
     """
-     Decides whether a traveller's entry into Kanadia should be accepted
-
-    :param input_file: The name of a JSON formatted file that contains cases to decide
-    :param countries_file: The name of a JSON formatted file that contains country data, such as whether an entry or transit visa is required, and whether there is currently a medical advisory
-    :return: List of strings. Possible values of strings are:
-        "Accept", "Reject", and "Quarantine"
+    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
+    :param date_string: date to be checked
+    :return: Boolean; True if the format is valid, False otherwise
 
     """
 
-    citizen_no = 0
-    valid = False
-    for citizen in json_citizens:
-        passport_validity = valid_passport_format(citizen['passport'])
-        if passport_validity is True:
-            print("valid")
-        else:
-            print("False")
-        date_validity = valid_date_format(citizen['birth_date'])
-        if date_validity is True:
-            print("valid")
-        else:
-            print("False")
+    date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
+    date_match = date_regex.search(date_string)
+    if date_match is None:
+        return False
+    else:
+        return True
+
 
 
 def valid_passport_format(passport_number):
@@ -136,48 +99,12 @@ def valid_visa_code_format(visa_code):
 
     """
 
-    visa_regex = re.compile(r'\w{5}-\w{5}-\w{5}-\w{5}-\w{5}')
+    visa_regex = re.compile(r'\w{5}-\w{5}')
     visa_match = visa_regex.search(visa_code)
     if visa_match is None:
         return False
     else:
         return True
-
-
-def valid_date_format(date_string):
-    """
-    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean; True if the format is valid, False otherwise
-
-    """
-
-    date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
-    date_match = date_regex.search(date_string)
-    if date_match is None:
-        return False
-    else:
-        return True
-
-
-def valid_visa_pls(traveler):
-    """
-    Checks whether the entire visa format is valid
-
-    :param traveler: visa code & visa date
-    :return: Boolean; True if valid, False otherwise
-    """
-
-    valid = False
-    visa_code = traveler['visa']['code']
-    visa_date = traveler['visa']['date']
-    valid_visa_code = valid_visa_code_format(visa_code)
-    valid_visa_date = check_visa_date(2, visa_date)
-    if (valid_visa_code and valid_visa_date) is True:
-        valid = True
-    else:
-        valid = False
-    return valid
 
 
 def check_visa_date(x, visa_date):
@@ -200,66 +127,193 @@ def check_visa_date(x, visa_date):
     # valid visa date is one that is less than two years old as per assignment instructions
     # if the visa date format is True, the visa is still valid
 
-def check_visa(traveler, valid_visa_format):
+def check_if_valid_visa(traveler):
+    """
+    Checks whether the entire visa format is valid
+
+    :param traveler: visa code & visa date
+    :return: Boolean; True if valid, False otherwise
+    """
+
+    visa_code = traveler['visa']['code']
+    visa_date = traveler['visa']['date']
+    valid_visa_code = valid_visa_code_format(visa_code)
+    visa_date_formatted = valid_date_format(visa_date)
+    valid_visa_date = is_more_than_x_years_ago(2, visa_date)
+    if valid_visa_code is True:
+        if visa_date_formatted is True:
+            if valid_visa_date is True:
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
+
+
+
+
+def check_visa(traveler):
     """
 
     :param traveler:
     :param valid_visa_format:
     :return:
     """
+    home_country = traveler['home']['country']
 
-    if traveler['home']['country'] == "KAN":
-        return True
+    if traveler['entry_reason'] == "returning":
+        if home_country == "KAN":
+            return True
+        else:
+            return False
+    elif traveler['entry_reason'] == "visit":
+        try:
+            if COUNTRIES[home_country]['visitor_visa_required'] == "0":
+                return True
+            elif COUNTRIES[home_country]['visitor_visa_required'] == "1":
+                try:
+                    valid = check_if_valid_visa(traveler)
+                    return valid
+                except KeyError:
+                    return False
+        except KeyError:
+            return False
     else:
+        return False
 
 
-    # for a in VISA_HAVERS:
-    # print valid_visa_pls(a)
 
 
-def quarantine_traveler(traveler, country):
+
+
+def quarantine_traveler(traveler):
     """
 
     :param traveler:
     :param country:
     :return:
     """
-
-    for a in json_citizens:
-        b = a['from']['country']
-        if (json_countries[b]['medical_advisory']) == "":
-            print("None")
+    MissingCountry = False
+    from_country = traveler['from']['country']
+    try:
+        if (COUNTRIES[from_country]['medical_advisory']) == "":
+            return False
+            try:
+                via_country = traveler['via']['country']
+                if COUNTRIES[via_country]['medical_advisory'] == "":
+                    return False
+                else:
+                    return True
+            except KeyError:
+                MissingCountry = True
         else:
-            print("Quarantine")
+            return True
+    except KeyError:
+        MissingCountry = True
+
+    if MissingCountry is True:
+        return "Reject"
+
 
     # list where each traveler has come from
     # compare that to the corresponding entry in the list of countries for a medical advisory
     # if the medical advisory returns blank, it passes
     # if there is anything at all in the medical advisory, return that the traveler should be quarantined
 
-def check_entry_completeness(REQUIRED_FIELDS, traveler):
+def check_entry_completeness(traveler):
     """
     Checks that traveler entry record is complete and that the date format is valid.
     :param: REQUIRED_FIELDS,traveler
     :return: Boolean; True if valid, False otherwise
     :raises: KeyError
     """
+    complete = False
     for entry in REQUIRED_FIELDS:
         try:
             j = traveler[entry]
             if len(j) > 1:
-                return True
-        except KeyError:
-            return True
-        try:
-           if valid_date_format(traveler["birth_date"]) == True:
-               return True
-           else:
-               return False
+                complete = True
+            try:
+                if valid_date_format(traveler["birth_date"]) is True:
+                    complete = True
+                else:
+                    return False
+            except KeyError:
+                return False
         except KeyError:
             return False
+    return complete
 
 
 
 
 
+
+
+
+def decide(input_file, countries_file):
+    """
+     Decides whether a traveller's entry into Kanadia should be accepted
+
+    :param input_file: The name of a JSON formatted file that contains cases to decide
+    :param countries_file: The name of a JSON formatted file that contains country data, such as whether an entry or transit visa is required, and whether there is currently a medical advisory
+    :return: List of strings. Possible values of strings are:
+        "Accept", "Reject", and "Quarantine"
+
+    """
+
+    results_list = []
+
+    # function assumes that all json files are properly formatted and will not run otherwise
+    with open(input_file, 'r') as a:
+        b = a.read()
+        travelers = json.loads(b)
+    with open(countries_file, 'r') as a:
+        b = a.read()
+        global COUNTRIES
+        COUNTRIES = json.loads(b)
+
+    for person in travelers:
+        accept = True
+        quarantine = False
+
+        accept = check_entry_completeness(person)
+        if accept is True:
+            accept = valid_passport_format(person['passport'])
+            if accept is True:
+                accept = check_visa(person)
+        quarantine = quarantine_traveler(person)
+        if quarantine == "Reject":
+            quarantine = False
+            accept = False
+        else:
+            accept = True
+
+
+
+    # return according to the priority ranking 1) Quarantine 2) Reject 3) Accept
+        if (quarantine is True) and (accept is True):
+            results_list.append("Quarantine")
+        elif (quarantine is True) and (accept is False):
+            results_list.append("Quarantine")
+        elif (quarantine is False) and (accept is False):
+            results_list.append("Reject")
+        elif (quarantine is False) and (accept is True):
+            results_list.append("Accept")
+
+
+    return results_list
+        # check for required fields
+        # check for valid passport
+        # check home country / valid visa
+        # check if quarantine material
+
+
+testcountries = "test_jsons/countries.json"
+returningcitizens = "test_jsons/test_returning_citizen.json"
+incomingforners = "test_jsons/test_incoming_foreigner.json"
+
+print decide(returningcitizens, testcountries)
+print decide(incomingforners, testcountries)
