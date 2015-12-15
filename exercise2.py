@@ -108,6 +108,7 @@ def decide(input_file, countries_file):
         else:
             print("False")
 
+
 def valid_passport_format(passport_number):
     """
     Checks whether a pasport number is five sets of five alpha-number characters separated by dashes. Imports passport
@@ -235,3 +236,30 @@ def quarantine_traveler(traveler, country):
     # compare that to the corresponding entry in the list of countries for a medical advisory
     # if the medical advisory returns blank, it passes
     # if there is anything at all in the medical advisory, return that the traveler should be quarantined
+
+def check_entry_completeness(REQUIRED_FIELDS, traveler):
+    """
+    Checks that traveler entry record is complete and that the date format is valid.
+    :param: REQUIRED_FIELDS,traveler
+    :return: Boolean; True if valid, False otherwise
+    :raises: KeyError
+    """
+    for entry in REQUIRED_FIELDS:
+        try:
+            j = traveler[entry]
+            if len(j) > 1:
+                return True
+        except KeyError:
+            return True
+        try:
+           if valid_date_format(traveler["birth_date"]) == True:
+               return True
+           else:
+               return False
+        except KeyError:
+            return False
+
+
+
+
+
