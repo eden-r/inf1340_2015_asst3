@@ -88,21 +88,8 @@ def is_more_than_x_years_ago(x, date_string):
 
 
 
-    """
 
-    citizen_no = 0
-    valid = False
-    for citizen in json_citizens:
-        passport_validity = valid_passport_format(citizen['passport'])
-        if passport_validity is True:
-            print("valid")
-        else:
-            print("False")
-        date_validity = valid_date_format(citizen['birth_date'])
-        if date_validity is True:
-            print("valid")
-        else:
-            print("False")
+
 
 
 def valid_passport_format(passport_number):
