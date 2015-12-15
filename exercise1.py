@@ -101,7 +101,7 @@ def projection(t, r):
     return new_table
 
     # for each element entered into list r
-    # searches the hearder of t
+    # searches the header of t
     # finds all values in that index of t[0][r[0]], etc
     # adds them to a new table
     """
