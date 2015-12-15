@@ -28,7 +28,8 @@ def test_returning():
 
 def test_incoming():
     """
-    Foreigners entering KAN.
+    Foreigners entering KAN. Must check if their documents are in order and properly filled
+
     """
 
     assert decide("test_incoming_foreigner.json", "countries.json") ==\
