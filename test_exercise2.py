@@ -46,7 +46,7 @@ def test_location_unknown():
 
 
 def test_reject_and_quarantine():
-    #test reject and quarantine
+    #test reject and quarantine decisions in decision()
     assert decide("test_jsons/test_reject.json", "test_jsons/countries.json") ==\
         ['Reject', 'Reject', 'Reject', 'Reject', 'Quarantine', 'Quarantine']
 
