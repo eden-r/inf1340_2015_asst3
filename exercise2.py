@@ -254,6 +254,8 @@ def decide(input_file, countries_file):
 
 # TESTING THE CODE
 
+
+"""
 test1 = "test_jsons/test_returning_citizen.json"
 test2 = "test_jsons/test_incoming_foreigner.json"
 test3 = "test_jsons/test_traveling_via.json"
@@ -270,4 +272,4 @@ print decide(test4, count1)
 print decide(test5, count1)
 print decide(test1, count2)
 
-
+"""
