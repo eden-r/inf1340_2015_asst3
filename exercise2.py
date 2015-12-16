@@ -140,6 +140,7 @@ def check_visa(traveler):
     """
 
     :param traveler:
+    :param valid_visa_format:
     :return:
     """
     home_country = traveler['home']['country']
@@ -178,14 +179,20 @@ def check_location_is_known(traveler):
     home_location = traveler['home']['country']
     from_location = traveler['from']['country']
 
-    if home_location in COUNTRIES:
-        return True
+    if from_location not in COUNTRIES:
+        if home_location != "KAN":
+            if home_location not in  COUNTRIES:
+                return False
     else:
-        return False
+        return True
+
+
+
 
 def quarantine_traveler(traveler):
     """
     :param traveler:
+    :param country:
     :return:
     """
     MissingCountry = False
@@ -224,7 +231,10 @@ def check_entry_completeness(traveler):
                 complete = True
             try:
                 if valid_date_format(traveler["birth_date"]) is True:
-                    complete = True
+                    if check_location_is_known(traveler) is True:
+                        complete = True
+                    else:
+                        return  False
                 else:
                     return False
             except KeyError:
@@ -274,7 +284,9 @@ def decide(input_file, countries_file):
             accept = valid_passport_format(person['passport'])
             if accept is True:
                 accept = check_visa(person)
-        quarantine = quarantine_traveler(person)
+
+        if accept is True:
+            quarantine = quarantine_traveler(person)
 
 
 
@@ -297,11 +309,6 @@ def decide(input_file, countries_file):
         # check if quarantine material
 
 
-testcountries = "test_jsons/countries.json"
-returningcitizens = "test_jsons/test_returning_citizen.json"
-incomingforners = "test_jsons/test_incoming_foreigner.json"
-rejectedforners = "test_jsons/test_reject.json"
 
-print decide(returningcitizens, testcountries)
-print decide(incomingforners, testcountries)
-print decide(rejectedforners, testcountries)
+print decide("test_jsons/test_traveling_via.json", "test_jsons/countries.json")
+print decide("test_jsons/test_location_known.json", "test_jsons/countries.json")
