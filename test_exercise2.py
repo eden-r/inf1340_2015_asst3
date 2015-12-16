@@ -35,6 +35,13 @@ def test_incoming():
            ['Accept', 'Reject', 'Quarantine', 'Accept']
 
 
+def test_reject():
+    """
+    Should reject all (returning citizens, incoming foreigners, people travlling via KAN)
+    :return:
+    """
+
+
 def test_traveling_via():
     assert decide("test_traveling_via.json", "countries.json") ==\
         ['Reject', 'Accept', 'Quarantine', 'Accept']
@@ -45,7 +52,6 @@ def test_location_unknown():
 #def test_location_known():
 # traveling travelling
 
-#def test_check_visa():
-
-    #assert check_visa("test_check_visa") == [True, True, False]
-
+def test_reject_and_quarantine():
+    assert decide("test_jsons/test_reject.json", "test_jsons/countries.json") ==\
+        ['Reject', 'Reject', 'Reject', 'Reject', 'Quarantine', 'Quarantine']
