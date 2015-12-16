@@ -144,7 +144,9 @@ def check_location_is_known(traveler):
     # function for checking if the traveler is coming from a real location
 
     home_location = traveler['home']['country']
+    home_location = home_location.upper()
     from_location = traveler['from']['country']
+    from_location = from_location.upper()
 
     if from_location not in COUNTRIES:
         if home_location != "KAN":
@@ -187,9 +189,11 @@ def quarantine_traveler(traveler):
 
     try:
         from_country = traveler['from']['country']
+        from_country = from_country.upper()
         if (COUNTRIES[from_country]['medical_advisory']) == "":
             try:
                 via_country = traveler['via']['country']
+                via_country = str(via_country.upper())
                 if COUNTRIES[via_country]['medical_advisory'] == "":
                     return False
                 else:
@@ -246,5 +250,24 @@ def decide(input_file, countries_file):
 
     return results_list
 
+
+
+# TESTING THE CODE
+
+test1 = "test_jsons/test_returning_citizen.json"
+test2 = "test_jsons/test_incoming_foreigner.json"
+test3 = "test_jsons/test_traveling_via.json"
+test4 = "test_jsons/test_location_known.json"
+test5 = "test_jsons/test_check_visa.json"
+count1 = "test_jsons/countries.json"
+count2 = "test_jsons/countries_altered.json"
+
+
+print decide(test1, count1)
+print decide(test2, count1)
+print decide(test3, count1)
+print decide(test4, count1)
+print decide(test5, count1)
+print decide(test1, count2)
 
 
