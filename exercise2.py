@@ -255,9 +255,13 @@ def decide(input_file, countries_file):
     results_list = []
 
     # function assumes that all json files are properly formatted and will not run otherwise
+
+    # Convert the entry record from JSON into Python
     with open(input_file, 'r') as a:
         b = a.read()
         travelers = json.loads(b)
+
+    # convert the list of countries from JSON into Python
     with open(countries_file, 'r') as a:
         b = a.read()
         global COUNTRIES
