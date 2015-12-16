@@ -45,10 +45,3 @@ def test_location_unknown():
         ['Reject', 'Accept', 'Quarantine', 'Accept']
 
 
-#def test_location_known():
-# traveling travelling
-
-#def test_check_visa():
-
-    #assert check_visa("test_check_visa") == [True, True, False]
-
