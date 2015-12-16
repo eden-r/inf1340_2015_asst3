@@ -140,7 +140,6 @@ def check_visa(traveler):
     """
 
     :param traveler:
-    :param valid_visa_format:
     :return:
     """
     home_country = traveler['home']['country']
@@ -187,7 +186,6 @@ def check_location_is_known(traveler):
 def quarantine_traveler(traveler):
     """
     :param traveler:
-    :param country:
     :return:
     """
     MissingCountry = False
@@ -302,6 +300,8 @@ def decide(input_file, countries_file):
 testcountries = "test_jsons/countries.json"
 returningcitizens = "test_jsons/test_returning_citizen.json"
 incomingforners = "test_jsons/test_incoming_foreigner.json"
+rejectedforners = "test_json/test_reject.json"
 
 print decide(returningcitizens, testcountries)
 print decide(incomingforners, testcountries)
+print decide(rejectedforners, testcountries)
