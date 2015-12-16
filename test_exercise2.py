@@ -44,4 +44,7 @@ def test_location_unknown():
     assert decide("test_location_known.json", "countries.json") ==\
         ['Reject', 'Accept', 'Quarantine', 'Accept']
 
-
+def test_missing_entries():
+    #tests for missing entries in traveller information
+    assert decide("test_missing_entries,json", "countries.json") ==\
+    ['Reject', 'Reject', 'Reject', 'Reject', 'Reject']
