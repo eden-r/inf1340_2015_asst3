@@ -48,6 +48,12 @@ def test_location_unknown():
         ['Reject', 'Accept', 'Quarantine', 'Accept']
 
 
+def test_reject_and_quarantine():
+    #test reject and quarantine
+    assert decide("test_jsons/test_reject.json", "test_jsons/countries.json") ==\
+        ['Reject', 'Reject', 'Reject', 'Reject', 'Quarantine', 'Quarantine']
+
+
 #def test_location_known():
 # traveling travelling
 

@@ -259,6 +259,7 @@ test2 = "test_jsons/test_incoming_foreigner.json"
 test3 = "test_jsons/test_traveling_via.json"
 test4 = "test_jsons/test_location_known.json"
 test5 = "test_jsons/test_check_visa.json"
+test6 = "test_jsons/test_reject_and_quarantine.json"
 count1 = "test_jsons/countries.json"
 count2 = "test_jsons/countries_altered.json"
 
@@ -268,6 +269,7 @@ print decide(test2, count1)
 print decide(test3, count1)
 print decide(test4, count1)
 print decide(test5, count1)
+print decide(test6, count1)
 print decide(test1, count2)
 
 
