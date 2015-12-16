@@ -67,7 +67,6 @@ def valid_date_format(date_string):
         return True
 
 
-
 def valid_passport_format(passport_number):
     # function for checking passport number formats
 
@@ -90,9 +89,6 @@ def valid_visa_code_format(visa_code):
         return True
 
 
-
-
-
 def check_if_valid_visa(traveler):
     # function for checking if a traveler's visa is valid
 
@@ -109,10 +105,13 @@ def check_if_valid_visa(traveler):
         return False
 
 
-
-
 def check_visa(traveler):
-    # function for checking whether or not the traveler NEEDS a visa
+    """
+    function for checking whether or not the traveler NEEDS a visa
+
+    we are making the assumption that the PASSPORT is issued by the "home" country,
+    so that is the one we check for visa needs (i.e. we do not need to check the "from" country
+    """
 
     home_country = traveler['home']['country']
 
@@ -135,9 +134,6 @@ def check_visa(traveler):
             return False
     else:
         return False
-
-
-
 
 
 def check_location_is_known(traveler):
@@ -170,7 +166,7 @@ def check_entry_completeness(traveler):
                     if check_location_is_known(traveler) is True:
                         complete = True
                     else:
-                        return  False
+                        return False
                 else:
                     return False
             except KeyError:
@@ -178,9 +174,6 @@ def check_entry_completeness(traveler):
         except KeyError:
             return False
     return complete
-
-
-
 
 
 
@@ -226,7 +219,6 @@ def decide(input_file, countries_file):
         global COUNTRIES
         COUNTRIES = json.loads(b)
 
-
     # run all the functions by iterating through the input list
     for person in travelers:
         accept = True
@@ -260,7 +252,6 @@ test2 = "test_jsons/test_incoming_foreigner.json"
 test3 = "test_jsons/test_traveling_via.json"
 test4 = "test_jsons/test_location_known.json"
 test5 = "test_jsons/test_check_visa.json"
-test6 = "test_jsons/test_reject_and_quarantine.json"
 count1 = "test_jsons/countries.json"
 count2 = "test_jsons/countries_altered.json"
 
@@ -270,7 +261,6 @@ print decide(test2, count1)
 print decide(test3, count1)
 print decide(test4, count1)
 print decide(test5, count1)
-print decide(test6, count1)
 print decide(test1, count2)
 print decide(test2, count2)
 print decide(test3, count2)
