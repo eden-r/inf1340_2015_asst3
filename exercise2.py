@@ -193,7 +193,7 @@ def quarantine_traveler(traveler):
         if (COUNTRIES[from_country]['medical_advisory']) == "":
             try:
                 via_country = traveler['via']['country']
-                via_country = str(via_country.upper())
+                via_country = via_country.upper()
                 if COUNTRIES[via_country]['medical_advisory'] == "":
                     return False
                 else:
@@ -254,8 +254,7 @@ def decide(input_file, countries_file):
 
 # TESTING THE CODE
 
-
-"""
+#"""
 test1 = "test_jsons/test_returning_citizen.json"
 test2 = "test_jsons/test_incoming_foreigner.json"
 test3 = "test_jsons/test_traveling_via.json"
@@ -273,5 +272,9 @@ print decide(test4, count1)
 print decide(test5, count1)
 print decide(test6, count1)
 print decide(test1, count2)
+print decide(test2, count2)
+print decide(test3, count2)
+print decide(test4, count2)
+print decide(test5, count2)
 
-"""
+#"""
