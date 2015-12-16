@@ -300,7 +300,7 @@ def decide(input_file, countries_file):
 testcountries = "test_jsons/countries.json"
 returningcitizens = "test_jsons/test_returning_citizen.json"
 incomingforners = "test_jsons/test_incoming_foreigner.json"
-rejectedforners = "test_json/test_reject.json"
+rejectedforners = "test_jsons/test_reject.json"
 
 print decide(returningcitizens, testcountries)
 print decide(incomingforners, testcountries)
