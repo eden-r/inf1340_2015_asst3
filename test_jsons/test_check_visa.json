@@ -10,8 +10,8 @@
       "country": "FRY"
     },
     "visa": {
-      "code": "MAGIC-12345",
-      "date": "2015-01-02"
+      "date": "2015-01-02",
+      "code": "MAGIC-12345"
     },
     "entry_reason": "visit",
     "from": {

@@ -140,9 +140,14 @@ def check_location_is_known(traveler):
     # function for checking if the traveler is coming from a real location
 
     home_location = traveler['home']['country']
-    home_location = home_location.upper()
+    traveler['home']['country'] = home_location.upper()
     from_location = traveler['from']['country']
-    from_location = from_location.upper()
+    traveler['from']['country'] = from_location.upper()
+    try:
+        via_location = traveler['via']['country']
+        traveler['via']['country'] = via_location.upper()
+    except KeyError:
+        pass
 
     if from_location not in COUNTRIES:
         if home_location != "KAN":
@@ -247,24 +252,25 @@ def decide(input_file, countries_file):
 # TESTING THE CODE
 
 #"""
-test1 = "test_jsons/test_returning_citizen.json"
-test2 = "test_jsons/test_incoming_foreigner.json"
-test3 = "test_jsons/test_traveling_via.json"
-test4 = "test_jsons/test_location_known.json"
-test5 = "test_jsons/test_check_visa.json"
 count1 = "test_jsons/countries.json"
 count2 = "test_jsons/countries_altered.json"
 
 
-print decide(test1, count1)
-print decide(test2, count1)
+#test1 = "test_jsons/test_returning_citizen.json"
+#print decide(test1, count1)
+#print decide(test1, count2)
+#test2 = "test_jsons/test_incoming_foreigner.json"
+#print decide(test2, count1)
+#print decide(test2, count2)
+test3 = "test_jsons/test_traveling_via.json"
 print decide(test3, count1)
-print decide(test4, count1)
-print decide(test5, count1)
-print decide(test1, count2)
-print decide(test2, count2)
 print decide(test3, count2)
-print decide(test4, count2)
-print decide(test5, count2)
+#test4 = "test_jsons/test_location_known.json"
+#print decide(test4, count1)
+#print decide(test4, count2)
 
-#"""
+#test5 = "test_jsons/test_check_visa.json"
+#print decide(test5, count1)
+#print decide(test5, count2)
+
+

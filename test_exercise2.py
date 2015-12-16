@@ -33,7 +33,7 @@ def test_incoming():
 
     # test for traveling via somewhere
     assert decide("test_traveling_via.json", "countries.json") ==\
-        ['Reject', 'Accept', 'Quarantine', 'Accept']
+        ['Reject', 'Accept', 'Quarantine', 'Accept', 'Reject']
 
     # test checking visa validity
     assert decide("test_check_visa.json", "countries.json") ==\
@@ -43,5 +43,27 @@ def test_incoming():
 def test_location_unknown():
     assert decide("test_location_known.json", "countries.json") ==\
         ['Reject', 'Accept', 'Quarantine', 'Accept']
+
+def test_new_country_file():
+    assert decide("test_returning_citizen.json", "countries_altered.json") ==\
+        ['Quarantine', 'Accept', 'Quarantine']
+
+    assert decide("test_incoming_foreigner.json", "countries_altered.json") ==\
+        ['Quarantine', 'Quarantine', 'Quarantine', 'Accept']
+
+    assert decide("test_traveling_via.json", "countries_altered.json") ==\
+        ['Reject', 'Accept', 'Quarantine', 'Accept', 'Quarantine']
+
+    assert decide("test_check_visa.json", "countries_altered.json") ==\
+        ['Quarantine', 'Accept', 'Quarantine']
+
+    assert decide("test_location_known.json", "countries_altered.json") ==\
+        ['Reject', 'Accept', 'Quarantine', 'Quarantine']
+
+
+
+
+
+
 
 
