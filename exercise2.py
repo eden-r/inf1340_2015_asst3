@@ -6,10 +6,8 @@ Computer-based immigration office for Kanadia
 
 """
 
-__author__ = 'Susan Sim'
-__email__ = "ses@drsusansim.org"
-__copyright__ = "2015 Susan Sim"
-__license__ = "MIT License"
+__author__ = 'Isabelle Deluce, Jeanne Marie Alfonso, & Eden Rusnell'
+
 
 import re
 import datetime
@@ -34,10 +32,10 @@ containing the following keys:
 COUNTRIES = None
 
 
-
 #####################
 # HELPER FUNCTIONS ##
 #####################
+
 def is_more_than_x_years_ago(x, date_string):
     """
     Checks if date is less than x years ago.
@@ -54,14 +52,12 @@ def is_more_than_x_years_ago(x, date_string):
     return (date - x_years_ago).total_seconds() > 0
 
 
+##########################
+## supporting functions ##
+##########################
 
 def valid_date_format(date_string):
-    """
-    Checks date regex against date string, ensuring whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean; True if the format is valid, False otherwise
-
-    """
+    # function for checking date string formats
 
     date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
     date_match = date_regex.search(date_string)
@@ -73,14 +69,7 @@ def valid_date_format(date_string):
 
 
 def valid_passport_format(passport_number):
-    """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes. Imports passport
-    number from json file and tests passport number against regex.
-
-    :param passport_number: alpha-numeric string
-    :return: Boolean; True if the format is valid, False otherwise
-
-    """
+    # function for checking passport number formats
 
     passport_regex = re.compile(r'(\w{5}-){4}\w{5}')
     passport_match = passport_regex.search(passport_number)
@@ -91,13 +80,7 @@ def valid_passport_format(passport_number):
 
 
 def valid_visa_code_format(visa_code):
-    """
-    Checks visa regex against visa code, ensuring visa code has two groups of five alphanumerical characters
-
-    :param visa_code: alpha-numberic string
-    :return: Boolean; True if the format is valid, False otherwise
-
-    """
+    # function for checking visa code formats
 
     visa_regex = re.compile(r'\w{5}-\w{5}')
     visa_match = visa_regex.search(visa_code)
@@ -108,18 +91,10 @@ def valid_visa_code_format(visa_code):
 
 
 
-    # checks visa date validity
-    # valid visa date is one that is less than two years old as per assignment instructions
-    # if the visa date format is True, the visa is still valid
+
 
 def check_if_valid_visa(traveler):
-    """
-    Checks whether the entire visa format is valid
-
-    :param traveler: visa code & visa date
-    :return: Boolean; True if valid, False otherwise
-    """
-
+    # function for checking if a traveler's visa is valid
 
     visa_to_check = traveler['visa']
     if valid_visa_code_format(visa_to_check['code']) is True:
@@ -137,12 +112,8 @@ def check_if_valid_visa(traveler):
 
 
 def check_visa(traveler):
-    """
+    # function for checking whether or not the traveler NEEDS a visa
 
-    :param traveler:
-    :param valid_visa_format:
-    :return:
-    """
     home_country = traveler['home']['country']
 
     if traveler['entry_reason'] == "returning":
@@ -170,59 +141,22 @@ def check_visa(traveler):
 
 
 def check_location_is_known(traveler):
-    """
-    Checks that the location in the traveler's entry is in countries list
+    # function for checking if the traveler is coming from a real location
 
-    :param traveler: home country and from country
-    :return: Boolean; True if location known, returns False otherwise
-    """
     home_location = traveler['home']['country']
     from_location = traveler['from']['country']
 
     if from_location not in COUNTRIES:
         if home_location != "KAN":
-            if home_location not in  COUNTRIES:
+            if home_location not in COUNTRIES:
                 return False
     else:
         return True
 
-
-
-
-def quarantine_traveler(traveler):
-    """
-    :param traveler:
-    :param country:
-    :return:
-    """
-    MissingCountry = False
-
-    from_country = traveler['from']['country']
-    if (COUNTRIES[from_country]['medical_advisory']) == "":
-        try:
-            via_country = traveler['via']['country']
-            if COUNTRIES[via_country]['medical_advisory'] == "":
-                return False
-            else:
-                return True
-        except KeyError:
-            return False
-    else:
-        return True
-
-
-    # list where each traveler has come from
-    # compare that to the corresponding entry in the list of countries for a medical advisory
-    # if the medical advisory returns blank, it passes
-    # if there is anything at all in the medical advisory, return that the traveler should be quarantined
 
 def check_entry_completeness(traveler):
-    """
-    Checks that traveler entry record is complete and that the date format is valid.
-    :param: REQUIRED_FIELDS,traveler
-    :return: Boolean; True if valid, False otherwise
-    :raises: KeyError
-    """
+    # function for checking that all required fields are present
+
     complete = False
     for entry in REQUIRED_FIELDS:
         try:
@@ -248,50 +182,59 @@ def check_entry_completeness(traveler):
 
 
 
+def quarantine_traveler(traveler):
+    # function for checking if there is a medical advisory for the country the trvaler is coming from/via
+
+    try:
+        from_country = traveler['from']['country']
+        if (COUNTRIES[from_country]['medical_advisory']) == "":
+            try:
+                via_country = traveler['via']['country']
+                if COUNTRIES[via_country]['medical_advisory'] == "":
+                    return False
+                else:
+                    return True
+            except KeyError:
+                return False
+        else:
+            return True
+    except KeyError:
+        return False
+
+
+
+###################
+## MAIN FUNCTION ##
+###################
 
 def decide(input_file, countries_file):
-    """
-     Decides whether a traveller's entry into Kanadia should be accepted
-
-    :param input_file: The name of a JSON formatted file that contains cases to decide
-    :param countries_file: The name of a JSON formatted file that contains country data, such as whether an entry or transit visa is required, and whether there is currently a medical advisory
-    :return: List of strings. Possible values of strings are:
-        "Accept", "Reject", and "Quarantine"
-
-    """
+    # Decides whether a traveller's entry into Kanadia should be accepted
+    # function assumes that all json files are properly formatted and will not run otherwise
 
     results_list = []
 
-    # function assumes that all json files are properly formatted and will not run otherwise
-
-    # Convert the entry record from JSON into Python
+    # making JSON entries readable
     with open(input_file, 'r') as a:
         b = a.read()
         travelers = json.loads(b)
-
-    # convert the list of countries from JSON into Python
     with open(countries_file, 'r') as a:
         b = a.read()
         global COUNTRIES
         COUNTRIES = json.loads(b)
 
+
+    # run all the functions by iterating through the input list
     for person in travelers:
         accept = True
         quarantine = False
-
         accept = check_entry_completeness(person)
         if accept is True:
             accept = valid_passport_format(person['passport'])
             if accept is True:
                 accept = check_visa(person)
+        quarantine = quarantine_traveler(person)
 
-        if accept is True:
-            quarantine = quarantine_traveler(person)
-
-
-
-
-    # return according to the priority ranking 1) Quarantine 2) Reject 3) Accept
+        # return according to the priority ranking 1) Quarantine 2) Reject 3) Accept
         if (quarantine is True) and (accept is True):
             results_list.append("Quarantine")
         elif (quarantine is True) and (accept is False):
@@ -301,14 +244,7 @@ def decide(input_file, countries_file):
         elif (quarantine is False) and (accept is True):
             results_list.append("Accept")
 
-
     return results_list
-        # check for required fields
-        # check for valid passport
-        # check home country / valid visa
-        # check if quarantine material
 
 
 
-print decide("test_jsons/test_traveling_via.json", "test_jsons/countries.json")
-print decide("test_jsons/test_location_known.json", "test_jsons/countries.json")
