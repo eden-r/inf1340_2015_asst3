@@ -251,9 +251,9 @@ def decide(input_file, countries_file):
 
 # TESTING THE CODE
 
-#"""
-count1 = "test_jsons/countries.json"
-count2 = "test_jsons/countries_altered.json"
+
+#count1 = "test_jsons/countries.json"
+#count2 = "test_jsons/countries_altered.json"
 
 
 #test1 = "test_jsons/test_returning_citizen.json"
@@ -277,8 +277,8 @@ count2 = "test_jsons/countries_altered.json"
 #print decide(test6, count1)
 #print decide(test6, count2)
 
-test7 = "test_jsons/test_reject_and_quarantine.json"
-print decide(test7, count1)
-print decide(test7, count2)
+#test7 = "test_jsons/test_reject_and_quarantine.json"
+#print decide(test7, count1)
+#print decide(test7, count2)
 
 
