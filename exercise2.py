@@ -67,7 +67,6 @@ def valid_date_format(date_string):
         return True
 
 
-
 def valid_passport_format(passport_number):
     # function for checking passport number formats
 
@@ -90,9 +89,6 @@ def valid_visa_code_format(visa_code):
         return True
 
 
-
-
-
 def check_if_valid_visa(traveler):
     # function for checking if a traveler's visa is valid
 
@@ -109,10 +105,13 @@ def check_if_valid_visa(traveler):
         return False
 
 
-
-
 def check_visa(traveler):
-    # function for checking whether or not the traveler NEEDS a visa
+    """
+    function for checking whether or not the traveler NEEDS a visa
+
+    we are making the assumption that the PASSPORT is issued by the "home" country,
+    so that is the one we check for visa needs (i.e. we do not need to check the "from" country
+    """
 
     home_country = traveler['home']['country']
 
@@ -137,16 +136,18 @@ def check_visa(traveler):
         return False
 
 
-
-
-
 def check_location_is_known(traveler):
     # function for checking if the traveler is coming from a real location
 
     home_location = traveler['home']['country']
-    home_location = home_location.upper()
+    traveler['home']['country'] = home_location.upper()
     from_location = traveler['from']['country']
-    from_location = from_location.upper()
+    traveler['from']['country'] = from_location.upper()
+    try:
+        via_location = traveler['via']['country']
+        traveler['via']['country'] = via_location.upper()
+    except KeyError:
+        pass
 
     if from_location not in COUNTRIES:
         if home_location != "KAN":
@@ -170,7 +171,7 @@ def check_entry_completeness(traveler):
                     if check_location_is_known(traveler) is True:
                         complete = True
                     else:
-                        return  False
+                        return False
                 else:
                     return False
             except KeyError:
@@ -178,9 +179,6 @@ def check_entry_completeness(traveler):
         except KeyError:
             return False
     return complete
-
-
-
 
 
 
@@ -226,7 +224,6 @@ def decide(input_file, countries_file):
         global COUNTRIES
         COUNTRIES = json.loads(b)
 
-
     # run all the functions by iterating through the input list
     for person in travelers:
         accept = True
@@ -255,30 +252,25 @@ def decide(input_file, countries_file):
 # TESTING THE CODE
 
 #"""
-test1 = "test_jsons/test_returning_citizen.json"
-test2 = "test_jsons/test_incoming_foreigner.json"
-test3 = "test_jsons/test_traveling_via.json"
-test4 = "test_jsons/test_location_known.json"
-test5 = "test_jsons/test_check_visa.json"
-test6 = "test_jsons/test_reject_and_quarantine.json"
-test7 = "test_jsons/test_missing_entries.json"
 count1 = "test_jsons/countries.json"
 count2 = "test_jsons/countries_altered.json"
 
 
+#test1 = "test_jsons/test_returning_citizen.json"
 #print decide(test1, count1)
-#print decide(test2, count1)
-#print decide(test3, count1)
-#print decide(test4, count1)
-#print decide(test5, count1)
-#print decide(test6, count1)
-print decide(test7, count1)
 #print decide(test1, count2)
+#test2 = "test_jsons/test_incoming_foreigner.json"
+#print decide(test2, count1)
 #print decide(test2, count2)
-#print decide(test3, count2)
+test3 = "test_jsons/test_traveling_via.json"
+print decide(test3, count1)
+print decide(test3, count2)
+#test4 = "test_jsons/test_location_known.json"
+#print decide(test4, count1)
 #print decide(test4, count2)
-#print decide(test5, count2)
-#print decide(test6, count2)
-#print decide(test7, count2)
 
-#"""
+#test5 = "test_jsons/test_check_visa.json"
+#print decide(test5, count1)
+#print decide(test5, count2)
+
+

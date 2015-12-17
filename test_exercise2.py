@@ -29,22 +29,64 @@ def test_incoming():
     """
 
     assert decide("test_incoming_foreigner.json", "countries.json") ==\
-           ['Accept', 'Reject', 'Quarantine', 'Accept']
+        ['Accept', 'Reject', 'Quarantine', 'Accept']
 
-    # test for traveling via somewhere
+    assert decide("test_incoming_foreigner.json", "countries_altered.json") ==\
+        ['Quarantine', 'Quarantine', 'Quarantine', 'Accept']
+
+
+def test_traveling_via():
+    """
+    Test incoming foreigners & returning citizens traveling via somewher else
+
+    """
     assert decide("test_traveling_via.json", "countries.json") ==\
-        ['Reject', 'Accept', 'Quarantine', 'Accept']
+        ['Reject', 'Accept', 'Quarantine', 'Accept', 'Reject']
 
-    # test checking visa validity
+    assert decide("test_traveling_via.json", "countries_altered.json") ==\
+        ['Reject', 'Accept', 'Quarantine', 'Accept', 'Quarantine']
+
+def test_visa_validity():
+    """
+    Test validity & formatting of incoming travelers from countries that require visas
+
+    """
     assert decide("test_check_visa.json", "countries.json") ==\
-        ['Accept', 'Accept', 'Quarantine']
+        ['Reject', 'Accept', 'Quarantine', 'Reject']
+
+    assert decide("test_check_visa.json", "countries_altered.json") ==\
+        ['Quarantine', 'Accept', 'Quarantine', 'Reject']
 
 
 def test_location_unknown():
+    """
+    Test that an unknown location returns Reject (or Quarantine) rather than crashing the program
+
+    """
     assert decide("test_location_known.json", "countries.json") ==\
         ['Reject', 'Accept', 'Quarantine', 'Accept']
 
-def test_missing_entries():
-    #tests for missing entries in traveller information
-    assert decide("test_missing_entries,json", "countries.json") ==\
-    ['Reject', 'Reject', 'Reject', 'Reject', 'Reject']
+    assert decide("test_location_known.json", "countries_altered.json") ==\
+        ['Reject', 'Accept', 'Quarantine', 'Quarantine']
+
+
+def test_new_country_file():
+    # test for changes to the country file
+    assert decide("test_returning_citizen.json", "countries_altered.json") ==\
+        ['Quarantine', 'Accept', 'Quarantine']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

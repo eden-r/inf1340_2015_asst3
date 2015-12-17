@@ -64,8 +64,8 @@
       "country": "III"
     },
       "visa": {
-        "code": "AINR93-0NFU3",
-        "date": "2011-01-01"
+        "date": "2011-01-01",
+        "code": "AINR93-0NFU3"
       },
     "via": {
       "city": "Platica",
