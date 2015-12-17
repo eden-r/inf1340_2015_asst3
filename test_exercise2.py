@@ -75,7 +75,16 @@ def test_new_country_file():
     assert decide("test_returning_citizen.json", "countries_altered.json") ==\
         ['Quarantine', 'Accept', 'Quarantine']
 
+def test_missing_entries():
+    #tests for missing entries in traveller information
+    assert decide("test_missing_entries,json", "countries.json") ==\
+    ['Reject', 'Reject', 'Reject', 'Reject', 'Reject']
 
+
+def test_reject_and_quarantine():
+    #test reject and quarantine
+    assert decide("test_jsons/test_reject.json", "test_jsons/countries.json") ==\
+        ['Reject', 'Reject', 'Reject', 'Reject', 'Quarantine', 'Quarantine']
 
 
 
