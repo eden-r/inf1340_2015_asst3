@@ -262,9 +262,9 @@ count2 = "test_jsons/countries_altered.json"
 #test2 = "test_jsons/test_incoming_foreigner.json"
 #print decide(test2, count1)
 #print decide(test2, count2)
-test3 = "test_jsons/test_traveling_via.json"
-print decide(test3, count1)
-print decide(test3, count2)
+#test3 = "test_jsons/test_traveling_via.json"
+#print decide(test3, count1)
+#print decide(test3, count2)
 #test4 = "test_jsons/test_location_known.json"
 #print decide(test4, count1)
 #print decide(test4, count2)
@@ -272,5 +272,13 @@ print decide(test3, count2)
 #test5 = "test_jsons/test_check_visa.json"
 #print decide(test5, count1)
 #print decide(test5, count2)
+
+#test6 = "test_jsons/test_missing_entries.json"
+#print decide(test6, count1)
+#print decide(test6, count2)
+
+test7 = "test_jsons/test_reject_and_quarantine.json"
+print decide(test7, count1)
+print decide(test7, count2)
 
 

@@ -80,11 +80,17 @@ def test_missing_entries():
     assert decide("test_missing_entries,json", "countries.json") ==\
     ['Reject', 'Reject', 'Reject', 'Reject', 'Reject']
 
+    assert decide("test_missing_entries,json", "countries_altered.json") ==\
+    ['Quarantine', 'Reject', 'Quarantine', 'Reject', 'Reject']
+
 
 def test_reject_and_quarantine():
     #test reject and quarantine
     assert decide("test_jsons/test_reject.json", "test_jsons/countries.json") ==\
         ['Reject', 'Reject', 'Reject', 'Reject', 'Quarantine', 'Quarantine']
+
+    assert decide("test_jsons/test_reject.json", "test_jsons/countries_altered.json") ==\
+        ['Quarantine', 'Reject', 'Quarantine', 'Reject', 'Quarantine', 'Quarantine']
 
 
 
